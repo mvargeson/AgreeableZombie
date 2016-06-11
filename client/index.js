@@ -1,15 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App.js';
+import { Router, Route, IndexRedirect, browserHistory } from 'react-router';
+
+import App from './components/App';
+import LibraryContainer from './components/LibraryContainer';
+import StoryTime from './components/StoryTime';
+import NoMatch from './components/NoMatch';
 
 // Check if browser has WebRTC, WebRTC is required for webcam/Twilio to work
+// TODO: check before entering the story time route
 if (!navigator.webkitGetUserMedia && !navigator.mozGetUserMedia) {
-    alert('WebRTC is not available in your browser.');
+  alert('WebRTC is not available in your browser.');
 }
 
-var render = function() {
+const render = () => {
   ReactDOM.render(
-    <App/>,
+    <Router history={browserHistory}>
+      <Route path="/" component={App}>
+        <IndexRedirect to="/library" />
+        <Route path="library" component={LibraryContainer} />
+        <Route path="story-time/:userId/:bookId" component={StoryTime} />
+        <Route path="*" component={NoMatch} />
+      </Route>
+    </Router>,
     document.getElementById('app')
   );
 };
