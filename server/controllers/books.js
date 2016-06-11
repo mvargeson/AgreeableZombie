@@ -15,7 +15,6 @@ module.exports = {
 
   getOneBook: function (req, res) {
     Book.findOne({ "_id": req.body.bookId }).then(book => {
-      console.log('book in server: ', book);
       res.json(book);
     });
   },
@@ -43,6 +42,22 @@ module.exports = {
         });
     });
   },
+
+  saveCreatedBook: function (req, res) {
+    var newCreatedBook = new Book({
+      bookTitle: req.body.bookTitle,
+      bookTitleImage: req.body.bookTitleImage,
+      bookData: req.body.bookData,
+    }).save(function(err, newBook) {
+      if (err) {
+        console.log('cannot save newBook');
+      } else {
+        console.log('successful save of newly created book')
+        res.send(newBook);
+      }
+    });
+  },
+
 
   // add all sample books data, called from get '/api/addAllBooks'
   addAllSampleBooks: function (req, res) {
